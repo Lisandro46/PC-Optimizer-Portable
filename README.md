@@ -6,9 +6,15 @@ También mide en vivo el consumo atribuible a cada aplicación: CPU, memoria RAM
 
 Todos los encabezados útiles permiten ordenar la tabla. Un clic aplica el orden inicial y el siguiente invierte entre ascendente y descendente. Las columnas de consumo y riesgo se ordenan por su valor real; `N/D` permanece al final.
 
+## Descargar versión portable
+
+**[Descargar PC Optimizer Portable v1.2.0](https://github.com/Lisandro46/PC-Optimizer-Portable/raw/main/downloads/PCOptimizerPortable-v1.2.0.zip)**
+
+Extraé el ZIP y ejecutá `PCOptimizerPortable.exe` como administrador. Windows puede mostrar una advertencia de SmartScreen porque el ejecutable todavía no tiene firma digital.
+
 ## Uso
 
-1. Copiá la carpeta `dist` a la PC o notebook.
+1. Descargá y extraé el ZIP de la versión portable.
 2. Abrí `PCOptimizerPortable.exe` y aceptá el permiso de administrador.
 3. Esperá el inventario completo. Las consultas de características de Windows pueden tardar varios minutos.
 4. Usá `?` para entender cada elemento y su riesgo.

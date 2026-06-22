@@ -1,0 +1,20 @@
+# Compilados y paquetes locales
+dist/
+release/
+*.exe
+*.zip
+
+# Inventarios y registros generados por la aplicación
+PCOptimizer-Logs/
+**/PCOptimizer-Logs/
+inventario-*.csv
+plan-*.txt
+resultado-*.txt
+
+# Archivos de desarrollo locales
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.pdb

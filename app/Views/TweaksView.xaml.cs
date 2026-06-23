@@ -29,7 +29,6 @@ namespace PcOptimizer
             SetBusy(true, "Leyendo estado actual...");
             items = service.Build(category);
             Grid.ItemsSource = items;
-            foreach (TweakItem t in items) t.PropertyChanged += delegate { UpdateApply(); };
             List<TweakItem> snapshot = items;
             await Task.Run(() => service.Refresh(snapshot));
             int applied = items.Count(i => i.Applied);

@@ -25,7 +25,6 @@ namespace PcOptimizer
             SetBusy(true, "Calculando espacio recuperable...");
             targets = service.BuildTargets();
             Grid.ItemsSource = targets;
-            foreach (CleanupTarget t in targets) t.PropertyChanged += delegate { UpdateTotal(); };
 
             var progress = new Progress<string>(m => Status.Text = m);
             List<CleanupTarget> snapshot = targets;

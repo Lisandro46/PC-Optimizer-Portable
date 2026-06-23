@@ -31,7 +31,12 @@ namespace PcOptimizer
             SourceFilter.SelectedIndex = 0;
             measureTimer.Interval = TimeSpan.FromSeconds(10);
             measureTimer.Tick += delegate { if (!busy && !measuring) Measure(); };
-            Loaded += delegate { if (inventory.Count == 0) StartScan(); };
+            Loaded += delegate
+            {
+                if (inventory.Count == 0) StartScan();
+                else if (!busy) { measureTimer.Start(); Measure(); }
+            };
+            Unloaded += delegate { measureTimer.Stop(); };
         }
 
         private async void StartScan()

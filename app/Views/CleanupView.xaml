@@ -1,0 +1,89 @@
+<UserControl x:Class="PcOptimizer.CleanupView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <UserControl.Resources>
+    <Style x:Key="RiskMini" TargetType="TextBlock">
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Foreground" Value="{StaticResource AccentBrush}" />
+      <Style.Triggers>
+        <DataTrigger Binding="{Binding Risk}" Value="MEDIO">
+          <Setter Property="Foreground" Value="{StaticResource AmberBrush}" />
+        </DataTrigger>
+        <DataTrigger Binding="{Binding Risk}" Value="ALTO">
+          <Setter Property="Foreground" Value="{StaticResource OrangeBrush}" />
+        </DataTrigger>
+      </Style.Triggers>
+    </Style>
+  </UserControl.Resources>
+
+  <Grid Margin="24,20,24,18">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <Grid Grid.Row="0" Margin="0,0,0,14">
+      <StackPanel>
+        <TextBlock Style="{StaticResource H1}" Text="Limpieza de disco" />
+        <TextBlock Style="{StaticResource Muted}" Margin="0,4,0,0"
+                   Text="Libera espacio borrando archivos seguros. Calculamos el tamaño real antes de tocar nada." />
+      </StackPanel>
+      <Button x:Name="RescanButton" Style="{StaticResource GhostButton}" Content="Recalcular" HorizontalAlignment="Right" VerticalAlignment="Top" Click="Rescan_Click" />
+    </Grid>
+
+    <Border Grid.Row="1" Background="#FF0E141B" CornerRadius="8">
+      <DataGrid x:Name="Grid" Margin="2">
+        <DataGrid.Columns>
+          <DataGridTemplateColumn Header="" Width="38" CanUserSort="False">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <CheckBox IsChecked="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          HorizontalAlignment="Center" Click="RowCheck_Click" />
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTextColumn Header="Qué se limpia" Binding="{Binding Name}" Width="1.3*" IsReadOnly="True" />
+          <DataGridTextColumn Header="Detalle" Binding="{Binding Description}" Width="2*" IsReadOnly="True">
+            <DataGridTextColumn.ElementStyle>
+              <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}" />
+                <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+              </Style>
+            </DataGridTextColumn.ElementStyle>
+          </DataGridTextColumn>
+          <DataGridTemplateColumn Header="Riesgo" Width="86">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Risk}" Style="{StaticResource RiskMini}" VerticalAlignment="Center" />
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTextColumn Header="Tamaño" Binding="{Binding SizeText}" Width="110" IsReadOnly="True">
+            <DataGridTextColumn.ElementStyle>
+              <Style TargetType="TextBlock">
+                <Setter Property="HorizontalAlignment" Value="Right" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Foreground" Value="{StaticResource CyanBrush}" />
+              </Style>
+            </DataGridTextColumn.ElementStyle>
+          </DataGridTextColumn>
+        </DataGrid.Columns>
+      </DataGrid>
+    </Border>
+
+    <Grid Grid.Row="2" Margin="0,14,0,0">
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <ProgressBar x:Name="Progress" Width="180" Height="6" IsIndeterminate="True" Visibility="Collapsed"
+                     Foreground="{StaticResource AccentBrush}" Background="#FF1B2430" BorderThickness="0" />
+        <TextBlock x:Name="Status" Margin="14,0,0,0" VerticalAlignment="Center" MaxWidth="520"
+                   TextTrimming="CharacterEllipsis" Foreground="{StaticResource TextMutedBrush}" Text="Calculando espacio recuperable..." />
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+        <TextBlock x:Name="TotalText" VerticalAlignment="Center" Margin="0,0,14,0" FontWeight="SemiBold"
+                   Foreground="{StaticResource AccentBrush}" Text="" />
+        <Button x:Name="CleanButton" Style="{StaticResource PrimaryButton}" Content="LIMPIAR SELECCIONADO" IsEnabled="False" Click="Clean_Click" />
+      </StackPanel>
+    </Grid>
+  </Grid>
+</UserControl>

@@ -1,61 +1,62 @@
-# PC Optimizer Portable — Modo experto
+# PC Optimizer Portable
 
-Aplicación portable para inventariar aplicaciones y componentes de Windows, explicar su función y preparar un plan explícito antes de desinstalar o desactivar.
+Optimizador de Windows todo-en-uno, portable y de modo experto. Inventaría, diagnostica y optimiza el equipo desde una sola app, sin instalar nada: el runtime de .NET viene incluido dentro del `.exe`.
 
-También mide en vivo el consumo atribuible a cada aplicación: CPU, memoria RAM, actividad de disco y cantidad de procesos. La lectura se actualiza automáticamente cada 10 segundos.
+> **v2.0.0** — reescrito en .NET 8 + WPF con interfaz de panel (sidebar + dashboard) y 8 módulos. Las versiones 1.x eran un desinstalador WinForms; esta versión lo amplía a un optimizador completo.
 
-Todos los encabezados útiles permiten ordenar la tabla. Un clic aplica el orden inicial y el siguiente invierte entre ascendente y descendente. Las columnas de consumo y riesgo se ordenan por su valor real; `N/D` permanece al final.
+## Descargar
 
-## Descargar versión portable
+El portable es un único `PCOptimizer.exe` (self-contained, ~63 MB). Ejecutalo como administrador. Windows puede mostrar una advertencia de SmartScreen porque el ejecutable todavía no tiene firma digital.
 
-**[Descargar PC Optimizer Portable v1.2.0](https://github.com/Lisandro46/PC-Optimizer-Portable/raw/main/downloads/PCOptimizerPortable-v1.2.0.zip)**
+## Módulos
 
-Extraé el ZIP y ejecutá `PCOptimizerPortable.exe` como administrador. Windows puede mostrar una advertencia de SmartScreen porque el ejecutable todavía no tiene firma digital.
+| Módulo | Qué hace |
+|---|---|
+| **Dashboard** | Score de salud + RAM, disco, apps al inicio y uptime reales. Accesos de optimización rápida. |
+| **Aplicaciones** | Inventario completo (programas, Store/AppX, preinstaladas, características y capacidades de Windows, Edge) con consumo en vivo (CPU/RAM/disco). Desinstalar o desactivar con plan + confirmación + punto de restauración + logs. |
+| **Arranque** | Apps que arrancan con Windows. Habilitar/deshabilitar (reversible vía `StartupApproved`). |
+| **Limpieza** | Temporales, caché de Windows Update, papelera, miniaturas, volcados de error y prefetch. Calcula el espacio recuperable real antes de borrar. |
+| **Servicios** | Servicios en Automático; pasarlos a Manual y volver (reversible). |
+| **Privacidad** | Tweaks reversibles: telemetría, ID de publicidad, historial de actividad, sugerencias, Bing en Inicio. |
+| **Rendimiento** | Plan de energía, efectos visuales, apps en segundo plano, retraso de inicio, transparencias. |
+| **Salud** | SMART de discos, reinicio pendiente, y análisis de integridad con DISM / reparación con SFC. |
 
-## Uso
+## Seguridad y diseño
 
-1. Descargá y extraé el ZIP de la versión portable.
-2. Abrí `PCOptimizerPortable.exe` y aceptá el permiso de administrador.
-3. Esperá el inventario completo. Las consultas de características de Windows pueden tardar varios minutos.
-4. Usá `?` para entender cada elemento y su riesgo.
-5. Marcá exclusivamente lo que quieras cambiar y elegí `Desinstalar` o `Desactivar`.
-6. Presioná **REVISAR PLAN**. La aplicación mostrará el método y la acción exacta antes de pedir la confirmación escrita.
+- **Nada se ejecuta ni se selecciona solo.** Cada cambio se confirma.
+- Cada elemento muestra **nivel de riesgo** (BAJO/MEDIO/ALTO/CRÍTICO) con explicación.
+- Arranque, Servicios, Privacidad y Rendimiento son **reversibles** desde la app.
+- La desinstalación de programas **sí** es definitiva (puede borrar configuración y datos).
+- Inventario, plan aprobado y resultados quedan en `PCOptimizer-Logs`, junto al `.exe` o en Documentos.
+- **Cero dependencias externas**: todo sale de APIs nativas de Windows y de PowerShell. Sin paquetes NuGet de terceros.
 
-Nada aparece seleccionado al iniciar. Las acciones no compatibles se muestran en el plan y se omiten.
+## Estructura del proyecto
 
-## Qué detecta
+```
+app/
+├── PCOptimizer.csproj      # .NET 8 (net8.0-windows), WPF
+├── app.manifest            # requireAdministrator + PerMonitorV2
+├── App.xaml(.cs)           # arranque, chequeo de admin, --selftest
+├── Theme/Styles.xaml       # paleta y estilos (dark)
+├── MainWindow.xaml(.cs)    # shell: sidebar + navegación
+├── Models/                 # AppItem y modelos de operación
+├── Services/               # Inventory, Action, ResourceMonitor, SystemInfo,
+│                           # Cleanup, Startup, Services, Tweaks, Health, Log, PowerShellRunner
+└── Views/                  # Dashboard, Apps, Cleanup, Startup, Services, Tweaks, Health, Plan
+```
 
-- Programas tradicionales, incluidos registros ocultos del sistema.
-- Aplicaciones AppX/MSIX de Microsoft Store para todos los usuarios.
-- Aplicaciones preinstaladas que Windows entrega a cuentas nuevas.
-- Características opcionales de Windows.
-- Capacidades de Windows.
-- Microsoft Edge como componente especial, con desinstalación experta o desactivación de precarga y segundo plano.
+## Requisitos
 
-## Consumo de recursos
+Windows 10/11 de 64 bits. El portable no requiere instalar nada. Para **compilar** hace falta el SDK de .NET 8.
 
-- `CPU ahora`, `RAM`, `Disco` y `Procesos` suman los procesos que pueden relacionarse de forma confiable con la carpeta o ejecutable de cada aplicación.
-- Una aplicación cerrada muestra cero.
-- `N/D` indica que el componente no tiene un proceso propio identificable o comparte procesos internos de Windows; no se inventa una atribución dudosa.
-- Las cifras son una foto del momento y pueden variar entre mediciones.
+## Compilar
 
-## Seguridad y límites
-
-- El modo experto permite intentar quitar paquetes que Windows marca como protegidos. Windows todavía puede rechazar la operación.
-- Desactivar Edge evita su precarga y ejecución en segundo plano; no garantiza que Windows deje de invocarlo en funciones internas.
-- Las actualizaciones de Windows pueden reinstalar ciertos componentes.
-- Un punto de restauración depende de que Protección del sistema esté habilitada.
-- El inventario, el plan aprobado y los resultados quedan en `PCOptimizer-Logs`, junto al ejecutable o en Documentos si esa carpeta no es escribible.
-- La desinstalación puede borrar preferencias y datos propios del programa. Conservá una copia de tus archivos importantes.
-
-## Portabilidad
-
-El ejecutable no requiere instalación. Está compilado para Windows 10/11 de 64 bits y usa .NET Framework 4.x, incluido normalmente en esas versiones de Windows.
-
-## Compilar nuevamente
-
-En PowerShell, desde esta carpeta:
+Con el SDK de .NET 8 instalado (`winget install Microsoft.DotNet.SDK.8`):
 
 ```powershell
+# Desarrollo
+dotnet build app/PCOptimizer.csproj
+
+# Portable self-contained (deja el .exe en release/PCOptimizerPortable-vX.Y.Z)
 .\build.ps1
 ```

@@ -1,0 +1,85 @@
+<UserControl x:Class="PcOptimizer.HealthView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <UserControl.Resources>
+    <Style x:Key="Dot" TargetType="Ellipse">
+      <Setter Property="Width" Value="11" />
+      <Setter Property="Height" Value="11" />
+      <Setter Property="Fill" Value="{StaticResource AccentBrush}" />
+      <Style.Triggers>
+        <DataTrigger Binding="{Binding Status}" Value="warn"><Setter Property="Fill" Value="{StaticResource AmberBrush}" /></DataTrigger>
+        <DataTrigger Binding="{Binding Status}" Value="bad"><Setter Property="Fill" Value="{StaticResource RedBrush}" /></DataTrigger>
+        <DataTrigger Binding="{Binding Status}" Value="info"><Setter Property="Fill" Value="{StaticResource CyanBrush}" /></DataTrigger>
+      </Style.Triggers>
+    </Style>
+  </UserControl.Resources>
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Margin="28,24,28,24">
+
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid Width="100" Height="100" VerticalAlignment="Center">
+          <Ellipse Width="84" Height="84" Stroke="#22FFFFFF" StrokeThickness="8" />
+          <Path x:Name="ScoreArc" StrokeThickness="8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" />
+          <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock x:Name="ScoreNumber" Text="--" FontSize="25" FontWeight="SemiBold" HorizontalAlignment="Center" />
+            <TextBlock Text="/ 100" FontSize="10" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Center" Margin="0,-3,0,0" />
+          </StackPanel>
+        </Grid>
+        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="20,0,0,0">
+          <TextBlock Style="{StaticResource H1}" Text="Salud y diagnóstico" />
+          <TextBlock x:Name="SubText" Style="{StaticResource Muted}" FontSize="13.5" TextWrapping="Wrap" MaxWidth="430" Margin="0,6,0,0" Text="Analizando..." />
+        </StackPanel>
+        <Button Grid.Column="2" x:Name="RescanButton" Style="{StaticResource GhostButton}" VerticalAlignment="Center" Content="Analizar de nuevo" Click="Rescan_Click" />
+      </Grid>
+
+      <ItemsControl x:Name="DiagList" Margin="0,20,0,0">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Border Background="{StaticResource BgCardBrush}" CornerRadius="8" Padding="14,11" Margin="0,0,0,8">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition Width="*" />
+                  <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Ellipse Style="{StaticResource Dot}" VerticalAlignment="Center" Margin="0,0,12,0" />
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                  <TextBlock Text="{Binding Title}" FontWeight="SemiBold" />
+                  <TextBlock Text="{Binding Detail}" Foreground="{StaticResource TextMutedBrush}" FontSize="12" Margin="0,2,0,0" TextWrapping="Wrap" />
+                </StackPanel>
+                <TextBlock Grid.Column="2" Text="{Binding Value}" VerticalAlignment="Center" TextAlignment="Right"
+                           Foreground="{StaticResource TextPrimaryBrush}" FontSize="12.5" MaxWidth="320" TextWrapping="Wrap" />
+              </Grid>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+
+      <Border Background="#FF0F1C2A" CornerRadius="10" Padding="16" Margin="0,8,0,0" BorderBrush="#3000D4FF" BorderThickness="1">
+        <StackPanel>
+          <TextBlock Style="{StaticResource H2}" Text="Integridad del sistema" />
+          <TextBlock Style="{StaticResource Muted}" FontSize="12.5" Margin="0,4,0,0"
+                     Text="DISM verifica la imagen de Windows (rápido). SFC repara archivos de sistema dañados (varios minutos)." />
+          <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+            <Button x:Name="DismButton" Style="{StaticResource GhostButton}" Content="Analizar (DISM)" Click="Dism_Click" Margin="0,0,10,0" />
+            <Button x:Name="SfcButton" Style="{StaticResource GhostButton}" Content="Reparar (SFC /scannow)" Click="Sfc_Click" />
+            <ProgressBar x:Name="Progress" Width="160" Height="6" IsIndeterminate="True" Visibility="Collapsed" VerticalAlignment="Center" Margin="14,0,0,0"
+                         Foreground="{StaticResource CyanBrush}" Background="#FF1B2430" BorderThickness="0" />
+          </StackPanel>
+          <Border Background="#FF0A0F16" CornerRadius="6" Margin="0,12,0,0" Padding="2">
+            <TextBox x:Name="Output" IsReadOnly="True" Background="Transparent" BorderThickness="0" Foreground="{StaticResource TextMutedBrush}"
+                     FontFamily="Consolas" FontSize="12" Height="150" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"
+                     Text="Resultado de los análisis…" />
+          </Border>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

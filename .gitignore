@@ -15,6 +15,8 @@ resultado-*.txt
 .vs/
 bin/
 obj/
+publish/
+publish-test/
 *.user
 *.suo
 *.pdb

@@ -1,0 +1,83 @@
+<UserControl x:Class="PcOptimizer.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Margin="28,24,28,24">
+
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Width="104" Height="104" VerticalAlignment="Center">
+          <Ellipse Width="88" Height="88" Stroke="#22FFFFFF" StrokeThickness="8" />
+          <Path x:Name="ScoreArc" StrokeThickness="8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" />
+          <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock x:Name="ScoreNumber" Text="--" FontSize="27" FontWeight="SemiBold" HorizontalAlignment="Center" />
+            <TextBlock Text="/ 100" FontSize="11" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Center" Margin="0,-4,0,0" />
+          </StackPanel>
+        </Grid>
+
+        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="22,0,0,0">
+          <TextBlock Style="{StaticResource H1}" Text="Salud del sistema" />
+          <TextBlock x:Name="SubText" Style="{StaticResource Muted}" FontSize="13.5" TextWrapping="Wrap"
+                     MaxWidth="430" HorizontalAlignment="Left" Margin="0,6,0,0" Text="Analizando el equipo..." />
+        </StackPanel>
+
+        <Button Grid.Column="2" x:Name="RescanButton" Style="{StaticResource GhostButton}" VerticalAlignment="Center"
+                Content="Volver a analizar" Click="Rescan_Click" />
+      </Grid>
+
+      <UniformGrid Columns="4" Margin="0,22,0,0">
+        <Border Style="{StaticResource Card}" Margin="0,0,6,0">
+          <StackPanel>
+            <TextBlock Style="{StaticResource Muted}" FontSize="11.5" Text="RAM en uso" />
+            <TextBlock x:Name="RamValue" FontSize="20" FontWeight="SemiBold" Margin="0,4,0,0" Text="--" />
+          </StackPanel>
+        </Border>
+        <Border Style="{StaticResource Card}" Margin="3,0,3,0">
+          <StackPanel>
+            <TextBlock Style="{StaticResource Muted}" FontSize="11.5" Text="Disco del sistema libre" />
+            <TextBlock x:Name="DiskValue" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource CyanBrush}" Margin="0,4,0,0" Text="--" />
+          </StackPanel>
+        </Border>
+        <Border Style="{StaticResource Card}" Margin="3,0,3,0">
+          <StackPanel>
+            <TextBlock Style="{StaticResource Muted}" FontSize="11.5" Text="Apps al inicio" />
+            <TextBlock x:Name="StartupValue" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource AmberBrush}" Margin="0,4,0,0" Text="--" />
+          </StackPanel>
+        </Border>
+        <Border Style="{StaticResource Card}" Margin="6,0,0,0">
+          <StackPanel>
+            <TextBlock Style="{StaticResource Muted}" FontSize="11.5" Text="Encendido hace" />
+            <TextBlock x:Name="UptimeValue" FontSize="20" FontWeight="SemiBold" Margin="0,4,0,0" Text="--" />
+          </StackPanel>
+        </Border>
+      </UniformGrid>
+
+      <Border Margin="0,18,0,0" CornerRadius="10" Padding="18,16" Background="#FF0F1C2A" BorderBrush="#3000FF88" BorderThickness="1">
+        <StackPanel>
+          <Grid>
+            <TextBlock Style="{StaticResource H2}" Text="Optimización rápida" />
+            <TextBlock Style="{StaticResource Muted}" FontSize="11.5" HorizontalAlignment="Right" Text="acciones recomendadas · reversibles" />
+          </Grid>
+
+          <StackPanel Margin="0,12,0,0">
+            <Button Style="{StaticResource GhostButton}" HorizontalContentAlignment="Left" Margin="0,0,0,8" Tag="cleanup" Click="Quick_Click">
+              <TextBlock Text="Liberar espacio: temporales, cachés y Windows Update →" Foreground="{StaticResource TextPrimaryBrush}" />
+            </Button>
+            <Button Style="{StaticResource GhostButton}" HorizontalContentAlignment="Left" Margin="0,0,0,8" Tag="startup" Click="Quick_Click">
+              <TextBlock Text="Acelerar el arranque: revisar apps de inicio y servicios →" Foreground="{StaticResource TextPrimaryBrush}" />
+            </Button>
+            <Button Style="{StaticResource GhostButton}" HorizontalContentAlignment="Left" Tag="apps" Click="Quick_Click">
+              <TextBlock Text="Quitar bloatware: inventario completo de aplicaciones →" Foreground="{StaticResource TextPrimaryBrush}" />
+            </Button>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

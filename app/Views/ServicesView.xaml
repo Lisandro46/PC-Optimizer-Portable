@@ -1,0 +1,86 @@
+<UserControl x:Class="PcOptimizer.ServicesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib">
+  <UserControl.Resources>
+    <x:Array x:Key="Modes" Type="sys:String">
+      <sys:String>Sin cambio</sys:String>
+      <sys:String>Manual</sys:String>
+      <sys:String>Automático</sys:String>
+    </x:Array>
+    <Style x:Key="RiskMini" TargetType="TextBlock">
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Foreground" Value="{StaticResource AccentBrush}" />
+      <Style.Triggers>
+        <DataTrigger Binding="{Binding Risk}" Value="MEDIO">
+          <Setter Property="Foreground" Value="{StaticResource AmberBrush}" />
+        </DataTrigger>
+        <DataTrigger Binding="{Binding Risk}" Value="ALTO">
+          <Setter Property="Foreground" Value="{StaticResource OrangeBrush}" />
+        </DataTrigger>
+      </Style.Triggers>
+    </Style>
+  </UserControl.Resources>
+
+  <Grid Margin="24,20,24,18">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <Grid Grid.Row="0" Margin="0,0,0,14">
+      <StackPanel>
+        <TextBlock Style="{StaticResource H1}" Text="Servicios en Automático" />
+        <TextBlock Style="{StaticResource Muted}" Margin="0,4,0,0"
+                   Text="Pasar a Manual hace que el servicio arranque solo cuando se necesita. No toques los marcados ALTO." />
+      </StackPanel>
+      <Button x:Name="RescanButton" Style="{StaticResource GhostButton}" Content="Recargar" HorizontalAlignment="Right" VerticalAlignment="Top" Click="Rescan_Click" />
+    </Grid>
+
+    <Border Grid.Row="1" Background="#FF0E141B" CornerRadius="8">
+      <DataGrid x:Name="Grid" Margin="2">
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Servicio" Binding="{Binding DisplayName}" Width="1.7*" IsReadOnly="True" />
+          <DataGridTextColumn Header="Estado" Binding="{Binding State}" Width="120" IsReadOnly="True">
+            <DataGridTextColumn.ElementStyle>
+              <Style TargetType="TextBlock"><Setter Property="Foreground" Value="{StaticResource TextMutedBrush}" /></Style>
+            </DataGridTextColumn.ElementStyle>
+          </DataGridTextColumn>
+          <DataGridTextColumn Header="Inicio actual" Binding="{Binding StartMode}" Width="110" IsReadOnly="True">
+            <DataGridTextColumn.ElementStyle>
+              <Style TargetType="TextBlock"><Setter Property="Foreground" Value="{StaticResource TextMutedBrush}" /></Style>
+            </DataGridTextColumn.ElementStyle>
+          </DataGridTextColumn>
+          <DataGridTemplateColumn Header="Riesgo" Width="78">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Risk}" Style="{StaticResource RiskMini}" VerticalAlignment="Center" ToolTip="{Binding RiskReason}" />
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn Header="Cambiar a" Width="150">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <ComboBox ItemsSource="{StaticResource Modes}" Margin="2"
+                          SelectedItem="{Binding NewMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          SelectionChanged="Mode_Changed" />
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+        </DataGrid.Columns>
+      </DataGrid>
+    </Border>
+
+    <Grid Grid.Row="2" Margin="0,14,0,0">
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <ProgressBar x:Name="Progress" Width="180" Height="6" IsIndeterminate="True" Visibility="Collapsed"
+                     Foreground="{StaticResource AccentBrush}" Background="#FF1B2430" BorderThickness="0" />
+        <TextBlock x:Name="Status" Margin="14,0,0,0" VerticalAlignment="Center" MaxWidth="560"
+                   TextTrimming="CharacterEllipsis" Foreground="{StaticResource TextMutedBrush}" Text="Leyendo servicios..." />
+      </StackPanel>
+      <Button x:Name="ApplyButton" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Right"
+              Content="APLICAR CAMBIOS" IsEnabled="False" Click="Apply_Click" />
+    </Grid>
+  </Grid>
+</UserControl>
